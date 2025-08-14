@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PM App</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -19,48 +22,48 @@
         </div>
         <div class="header-right">
             @auth
-            <div class="profile-dropdown-container">
-                <button class="profile-trigger" onclick="toggleProfileDropdown()">
-                    <span class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
-                </button>
+                <div class="profile-dropdown-container">
+                    <button class="profile-trigger" onclick="toggleProfileDropdown()">
+                        <span class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                    </button>
 
-                <div class="profile-dropdown" id="profileDropdown">
-                    <div class="profile-header">
-                        <div class="profile-avatar-large">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-header">
+                            <div class="profile-avatar-large">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <div class="profile-info">
+                                <div class="profile-name">{{ auth()->user()->name }}</div>
+                                <div class="profile-email">{{ auth()->user()->email }}</div>
+                            </div>
                         </div>
-                        <div class="profile-info">
-                            <div class="profile-name">{{ auth()->user()->name }}</div>
-                            <div class="profile-email">{{ auth()->user()->email }}</div>
-                        </div>
-                    </div>
 
-                    <div class="profile-details">
-                        <div class="profile-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>Compte créé le</span>
-                            <span class="profile-value">{{ auth()->user()->created_at->format('d/m/Y') }}</span>
+                        <div class="profile-details">
+                            <div class="profile-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Compte créé le</span>
+                                <span class="profile-value">{{ auth()->user()->created_at->format('d/m/Y') }}</span>
+                            </div>
+                            <div class="profile-item">
+                                <i class="fas fa-user-tag"></i>
+                                <span>Rôle</span>
+                                <span class="profile-value">{{ ucfirst(auth()->user()->role) }}</span>
+                            </div>
                         </div>
-                        <div class="profile-item">
-                            <i class="fas fa-user-tag"></i>
-                            <span>Rôle</span>
-                            <span class="profile-value">{{ ucfirst(auth()->user()->role) }}</span>
-                        </div>
-                    </div>
 
-                    <div class="profile-actions">
-                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="logout-dropdown-btn">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Déconnexion
-                            </button>
-                        </form>
+                        <div class="profile-actions">
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="logout-dropdown-btn">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Déconnexion
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
             @else
-            <a href="{{ route('login') }}" class="login-btn">Connexion</a>
+                <a href="{{ route('login') }}" class="login-btn">Connexion</a>
             @endauth
         </div>
     </header>
@@ -69,18 +72,25 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-content">
             <ul class="nav-menu">
-                <li><a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Tableau de bord</a></li>
-                <li><a href="{{ route('projects.index') }}" class="nav-link"><i class="fas fa-folder"></i> Projets</a></li>
+                <li><a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-chart-bar"></i> Tableau de
+                        bord</a></li>
+                <li><a href="{{ route('projects.index') }}" class="nav-link"><i class="fas fa-folder"></i> Projets</a>
+                </li>
                 @auth
-                @if(auth()->user()->isMember())
-                <li><a href="{{ route('my.work') }}" class="nav-link"><i class="fas fa-briefcase"></i> Mon travail</a></li>
-                <li><a href="{{ route('daily_reports.my_day') }}" class="nav-link"><i class="fas fa-calendar-day"></i> Ma journée</a></li>
-                @endif
-                @if(auth()->user()->isManager())
-                <li><a href="{{ route('daily_reports.daily_reports') }}" class="nav-link"><i class="fas fa-file-alt"></i> Rapports Journaliers</a></li>
-                <li><a href="{{ route('teams.index') }}" class="nav-link"><i class="fas fa-users"></i> Équipes</a></li>
-                <li><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-user-friends"></i> Utilisateurs</a></li>
-                @endif
+                    @if (auth()->user()->isMember())
+                        <li><a href="{{ route('my.work') }}" class="nav-link"><i class="fas fa-briefcase"></i> Mon
+                                travail</a></li>
+                        <li><a href="{{ route('daily_reports.my_day') }}" class="nav-link"><i
+                                    class="fas fa-calendar-day"></i> Ma journée</a></li>
+                    @endif
+                    @if (auth()->user()->isManager())
+                        <li><a href="{{ route('daily_reports.daily_reports') }}" class="nav-link"><i
+                                    class="fas fa-file-alt"></i> Rapports Journaliers</a></li>
+                        <li><a href="{{ route('teams.index') }}" class="nav-link"><i class="fas fa-users"></i> Équipes</a>
+                        </li>
+                        <li><a href="{{ route('users.index') }}" class="nav-link"><i class="fas fa-user-friends"></i>
+                                Utilisateurs</a></li>
+                    @endif
                 @endauth
             </ul>
         </div>
@@ -93,18 +103,18 @@
     <main class="main-content">
         <div class="content-wrapper">
             <!-- Messages Flash -->
-            @if(session('ok'))
-            <div class="flash-message success">
-                {{ session('ok') }}
-            </div>
+            @if (session('ok'))
+                <div class="flash-message success">
+                    {{ session('ok') }}
+                </div>
             @endif
 
-            @if($errors->any())
-            <div class="flash-message error">
-                @foreach($errors->all() as $e)
-                    <p>{{ $e }}</p>
-                @endforeach
-            </div>
+            @if ($errors->any())
+                <div class="flash-message error">
+                    @foreach ($errors->all() as $e)
+                        <p>{{ $e }}</p>
+                    @endforeach
+                </div>
             @endif
 
             <!-- Contenu de la page -->
@@ -118,7 +128,7 @@
     </main>
 
     <!-- Floating AI Button -->
-    @if(auth()->user()->isManager())
+    @if (auth()->user()->isManager())
         <button class="ai-button" onclick="toggleAISidebar()">
             <i class="fas fa-robot"></i>
         </button>
@@ -228,8 +238,11 @@
                 removeLoadingMessage();
 
                 if (data.success) {
-                    addChatMessage(data.response || 'Réponse reçue', 'bot');
-                    chatSession.push({ user: message, bot: data.response });
+                    addChatMessage(data.response, 'bot');
+                    chatSession.push({
+                        user: message,
+                        bot: data.response
+                    });
                 } else {
                     addChatMessage('Désolé, une erreur est survenue. Veuillez réessayer.', 'bot');
                 }
@@ -438,7 +451,8 @@
             color: var(--gray-500);
         }
 
-        .logout-btn, .login-btn {
+        .logout-btn,
+        .login-btn {
             background-color: #8B0000;
             border: none;
             padding: 8px 16px;
@@ -451,7 +465,8 @@
             font-weight: 500;
         }
 
-        .logout-btn:hover, .login-btn:hover {
+        .logout-btn:hover,
+        .login-btn:hover {
             background-color: #a31616;
             transform: translateY(-1px);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -562,7 +577,8 @@
             padding: 12px 20px;
         }
 
-        .profile-link, .logout-dropdown-btn {
+        .profile-link,
+        .logout-dropdown-btn {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -578,7 +594,8 @@
             transition: var(--transition);
         }
 
-        .profile-link:hover, .logout-dropdown-btn:hover {
+        .profile-link:hover,
+        .logout-dropdown-btn:hover {
             background: var(--gray-100);
             color: var(--gray-900);
         }
@@ -955,4 +972,5 @@
         }
     </style>
 </body>
+
 </html>

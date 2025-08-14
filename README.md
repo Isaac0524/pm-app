@@ -13,7 +13,7 @@ PM App est une application de gestion de projet moderne développée avec Larave
 
 ### 1. Cloner le projet
 ```bash
-git clone [URL_DU_REPO]
+git clone [https://github.com/Isaac0524/pm-app.git]
 cd pm-app
 ```
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\AIController;
 use App\Http\Controllers\MyWorkController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/dashboard', fn() => redirect()->route('dashboard'))->name('home');
 // Public
@@ -78,12 +79,12 @@ Route::middleware('auth')->group(function () {
     // IA - Endpoints AI
     Route::prefix('api/ai')->group(function () {
         // Analyse de projet
-        Route::post('/analyze-project/{project}', [AIController::class, 'analyzeProject'])
-            ->name('ai.analyze.project');
+        Route::post('/projects/{project}/analyze', [ProjectController::class, 'analyzeProject'])->name('projects.analyze');
+
 
         // Génération d'activités
-        Route::post('/generate-activities/{project}', [AIController::class, 'generateActivities'])
-            ->name('ai.generate.activities');
+        Route::post('/projects/{project}/create-activities', [ProjectController::class, 'createActivitiesFromAnalysis'])->name('projects.create-activities');
+
 
         // Génération de tâches
         Route::post('/generate-tasks/{activity}', [AIController::class, 'generateTasks'])

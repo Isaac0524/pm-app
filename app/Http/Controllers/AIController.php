@@ -7,9 +7,12 @@ use App\Models\Project;
 use App\Models\Activity;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; // Ajouté
 
 class AIController extends Controller
 {
+    use AuthorizesRequests; // Ajouté
+
     protected $aiService;
 
     public function __construct(AIClientService $aiService)

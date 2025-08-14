@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AIClientService;
+
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
