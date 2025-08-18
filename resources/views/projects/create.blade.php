@@ -174,7 +174,7 @@ textarea {
 
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea id="description" name="description" required></textarea>
+                <textarea id="description" name="description" ></textarea>
             </div>
 
             <div class="form-row">
@@ -186,13 +186,6 @@ textarea {
 
             <div class="buttons">
                 <button class="btn primary" type="submit">Créer</button>
-                <button type="button" class="btn" id="suggest-list">IA: suggérer une liste d'activités/tâches</button>
-            </div>
-
-            <div class="panel">
-                <div class="small">Tâches proposées pour la première activité</div>
-                <div data-dyn-list></div>
-                <button type="button" class="btn" data-add-row="[data-dyn-list]" style="margin-top: 0.75rem;">Ajouter une ligne</button>
             </div>
         </form>
     </div>

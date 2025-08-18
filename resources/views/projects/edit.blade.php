@@ -135,7 +135,7 @@ textarea {
 
             <div class="form-group">
                 <label>Description</label>
-                <textarea name="description" required>{{ old('description',$project->description) }}</textarea>
+                <textarea name="description" >{{ old('description',$project->description) }}</textarea>
             </div>
 
             <div class="form-row">
