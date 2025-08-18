@@ -145,7 +145,7 @@
                                             <button
                                                 onclick="openEditModal({{ $u->id }}, '{{ $u->name }}', '{{ $u->email }}', '{{ $u->role }}', '{{ $u->status }}')"
                                                 class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                                                {{ $u->id === Auth::id() ? 'disabled' : '' }}>
+                                                >
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <form method="POST" action="{{ route('users.reset_password', $u) }}"

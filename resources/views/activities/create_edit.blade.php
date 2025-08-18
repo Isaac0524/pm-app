@@ -108,59 +108,12 @@
         <label>Échéance</label>
         <input type="date" name="due_date" value="{{ old('due_date',$activity->due_date) }}">
       </div>
-      @if($activity->exists)
-      <div>
-        <label>Statut</label>
-        <select name="status">
-          <option value="in_progress" @selected($activity->status==='in_progress')>En cours</option>
-          <option value="completed" @selected($activity->status==='completed')>Terminé</option>
-        </select>
-      </div>
-      @endif
     </div>
 
     <div style="margin-top:12px; display:flex; flex-wrap: wrap; gap:8px; align-items:center;">
       <button class="btn primary">{{ $activity->exists ? 'Enregistrer' : 'Créer' }}</button>
-      @if(!$activity->exists)
-      <button type="button" class="btn" id="ai-list">IA: proposer une liste de tâches</button>
-      @endif
     </div>
-
-    @if(!$activity->exists)
-    <div class="panel" style="margin-top:12px">
-      <div class="small" style="margin-bottom:8px">Tâches à créer pour cette activité</div>
-      <div data-dyn-list></div>
-      <button type="button" class="btn" data-add-row="[data-dyn-list]">Ajouter une ligne</button>
-    </div>
-    @endif
   </form>
 </div>
-
-<script>
-const actForm = document.getElementById('activity-form');
-idleSuggestForForm(actForm, {
-  url: '{{ route('ai.suggest.task_fields') }}',
-  titleSel:'input[name="title"]',
-  descSel:'textarea[name="description"]',
-  projectId: {{ $project->id }},
-  aiMode:'fields'
-});
-const aiListBtn = document.getElementById('ai-list');
-if (aiListBtn) {
-  aiListBtn.addEventListener('click', ()=>{
-    const params = new URLSearchParams({
-      project_id: '{{ $project->id }}',
-      activity_title: actForm.querySelector('input[name="title"]').value,
-      activity_description: actForm.querySelector('textarea[name="description"]').value
-    });
-    fetch('{{ route('ai.suggest.task_list') }}?'+params.toString(), { headers:{'X-Requested-With':'XMLHttpRequest'} })
-    .then(r=>r.json()).then(data=>{
-      const container = actForm.querySelector('[data-dyn-list]');
-      container.innerHTML = '';
-      data.tasks.forEach(t=>addTaskRow(container, t.title, t.description, t.priority));
-    });
-  });
-}
-</script>
 
 @endsection

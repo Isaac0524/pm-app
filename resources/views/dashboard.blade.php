@@ -232,7 +232,7 @@
                                     <span class="separator">•</span>
                                     <span>{{ $project->activities_count }} activités</span>
                                     <span class="separator">•</span>
-                                    <span>{{ $project->activities_sum_tasks_count ?? 0 }} tâches</span>
+                                    <span>{{ $project->activities->sum(function ($a) {return $a->tasks->count();}) }} tâches</span>
                                 </p>
                             </div>
                             @if($project->due_date)

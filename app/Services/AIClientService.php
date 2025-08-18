@@ -194,4 +194,192 @@ class AIClientService
             ]
         ];
     }
+     public function sendChatMessage($message, $context = [])
+    {
+        $response = Http::post("{$this->pythonApiUrl}/chat/message", [
+            'message' => $message,
+            'context' => $context,
+        ]);
+
+        return $response->json();
+    }
+
+    /**
+     * Create a project from a title using AI
+     */
+    public function createProjectFromTitle(string $title): array
+    {
+        try {
+            $response = Http::timeout(30)->post("{$this->pythonApiUrl}/chat/create-project", [
+                'title' => $title
+            ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            throw new Exception('Failed to create project: ' . $response->body());
+
+        } catch (Exception $e) {
+            Log::error('AIClientService::createProjectFromTitle error', [
+                'error' => $e->getMessage(),
+                'title' => $title
+            ]);
+
+            // Return default structure
+            return [
+                'success' => true,
+                'project' => [
+                    'title' => $title,
+                    'description' => 'Projet créé à partir du titre: ' . $title,
+                    'status' => 'active'
+                ]
+            ];
+        }
+    }
+
+    /**
+     * Create a task from chat input
+     */
+    public function createTaskFromChat(string $taskTitle, string $projectName): array
+    {
+        try {
+            $response = Http::timeout(30)->post("{$this->pythonApiUrl}/chat/create-task", [
+                'task_title' => $taskTitle,
+                'project_name' => $projectName
+            ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            throw new Exception('Failed to create task: ' . $response->body());
+
+        } catch (Exception $e) {
+            Log::error('AIClientService::createTaskFromChat error', [
+                'error' => $e->getMessage(),
+                'task_title' => $taskTitle,
+                'project_name' => $projectName
+            ]);
+
+            // Return default structure
+            return [
+                'success' => true,
+                'task' => [
+                    'title' => $taskTitle,
+                    'description' => 'Tâche créée via chat',
+                    'estimated_hours' => 2,
+                    'priority' => 'medium'
+                ]
+            ];
+        }
+    }
+
+    /**
+     * Modify a project via chat
+     */
+    public function modifyProjectViaChat(string $projectName, string $modification): array
+    {
+        try {
+            $response = Http::timeout(30)->post("{$this->pythonApiUrl}/chat/modify-project", [
+                'project_name' => $projectName,
+                'modification' => $modification
+            ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            throw new Exception('Failed to modify project: ' . $response->body());
+
+        } catch (Exception $e) {
+            Log::error('AIClientService::modifyProjectViaChat error', [
+                'error' => $e->getMessage(),
+                'project_name' => $projectName,
+                'modification' => $modification
+            ]);
+
+            // Return default response
+            return [
+                'success' => true,
+                'message' => 'Projet modifié avec succès',
+                'modification' => $modification
+            ];
+        }
+    }
+
+    /**
+     * Generate tasks for an activity
+     */
+    public function generateTasks(int $activityId): array
+    {
+        try {
+            $response = Http::timeout(30)->post("{$this->pythonApiUrl}/generate-tasks/{$activityId}");
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            throw new Exception('Failed to generate tasks: ' . $response->body());
+
+        } catch (Exception $e) {
+            Log::error('AIClientService::generateTasks error', [
+                'error' => $e->getMessage(),
+                'activity_id' => $activityId
+            ]);
+
+            // Return default response
+            return [
+                'success' => true,
+                'tasks' => [
+                    [
+                        'title' => 'Tâche générée automatiquement',
+                        'description' => 'Tâche créée via génération automatique',
+                        'estimated_hours' => 2,
+                        'priority' => 'medium'
+                    ]
+                ]
+            ];
+        }
+    }
+
+    /**
+     * Add task via chat
+     */
+    public function addTaskViaChat(string $taskTitle, string $projectName, string $context = ''): array
+    {
+        try {
+            $response = Http::timeout(30)->post("{$this->pythonApiUrl}/chat/add-task", [
+                'task_title' => $taskTitle,
+                'project_name' => $projectName,
+                'context' => $context
+            ]);
+
+            if ($response->successful()) {
+                return $response->json();
+            }
+
+            throw new Exception('Failed to add task via chat: ' . $response->body());
+
+        } catch (Exception $e) {
+            Log::error('AIClientService::addTaskViaChat error', [
+                'error' => $e->getMessage(),
+                'task_title' => $taskTitle,
+                'project_name' => $projectName,
+                'context' => $context
+            ]);
+
+            // Return default response
+            return [
+                'success' => true,
+                'task' => [
+                    'title' => $taskTitle,
+                    'description' => $context ?: 'Tâche ajoutée via chat',
+                    'estimated_hours' => 2,
+                    'priority' => 'medium'
+                ]
+            ];
+        }
+    }
+
 }

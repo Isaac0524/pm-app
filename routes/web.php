@@ -97,6 +97,8 @@ Route::middleware('auth')->group(function () {
         // Chat endpoints
         Route::post('/chat/message', [ChatController::class, 'sendMessage'])
             ->name('ai.chat.message');
+        Route::post('/chat/handle-message', [ChatController::class, 'handleMessage'])
+            ->name('ai.chat.handle_message');
         Route::post('/chat/create-project', [ChatController::class, 'createProject'])
             ->name('ai.chat.create_project');
         Route::post('/chat/add-task', [ChatController::class, 'addTask'])

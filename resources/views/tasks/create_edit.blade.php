@@ -119,9 +119,9 @@
                                     @endif
                                 @endforeach
                             </select>
-                            <div class="form-help">
+                            <div class="form-help" style="color: #10b981">
                                 <i class="fas fa-info-circle"></i>
-                                Maintenez Ctrl/Cmd pour sélectionner plusieurs utilisateurs
+                                Selectionner un membre pour executer la dite tache
                             </div>
                         </div>
                     </div>
@@ -140,23 +140,6 @@
                             rows="3"
                         >{{ old('notes',$task->notes) }}</textarea>
                     </div>
-
-                    @if($task->exists)
-                    <!-- Statut (seulement en modification) -->
-                    <div class="form-group">
-                        <label for="status">
-                            <i class="fas fa-tasks"></i>
-                            Statut
-                        </label>
-                        <select id="status" name="status" class="form-control">
-                            @foreach(['open' => 'Ouvert', 'in_progress' => 'En cours', 'completed_by_assignee' => 'Terminé par assigné', 'finalized' => 'Finalisé'] as $key => $value)
-                                <option value="{{ $key }}" @selected(old('status',$task->status)===$key)>
-                                    {{ $value }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @endif
 
                     <!-- Actions -->
                     <div class="form-actions">
@@ -177,7 +160,7 @@
         <div class="selected-assignees" id="selected-assignees" style="display: none;">
             <div class="card">
                 <div class="card-header">
-                    <h3><i class="fas fa-users"></i> Assignés sélectionnés</h3>
+                    <h3><i class="fas fa-users"></i> Assigné sélectionné</h3>
                 </div>
                 <div class="card-content">
                     <div class="assignees-preview" id="assignees-preview"></div>
@@ -469,10 +452,6 @@
     color: var(--primary-color);
 }
 
-.form-control:valid {
-    border-color: var(--success-color);
-}
-
 /* Loading State */
 .btn:disabled {
     opacity: 0.6;
@@ -571,18 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateAssigneesPreview(); // Initial call
 });
 
-// Script existant pour l'IA
-const tForm = document.getElementById('task-form');
-if (typeof idleSuggestForForm === 'function') {
-    idleSuggestForForm(tForm, {
-        url: '{{ route('ai.suggest.task_fields') }}',
-        titleSel: 'input[name="title"]',
-        descSel: 'textarea[name="description"]',
-        activityId: {{ $activity->id }},
-        projectId: {{ $activity->project_id }},
-        aiMode: 'fields'
-    });
-}
 </script>
 
 <!-- Font Awesome CDN -->

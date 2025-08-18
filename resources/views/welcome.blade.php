@@ -204,9 +204,8 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo">LIK-PRO</div>
+        <div class="logo">PM-APP</div>
         <nav class="nav-buttons">
-            <a href="<?php echo e(route('welcome')); ?>" class="nav-btn home-btn">Home</a>
             <a href="<?php echo e(route('login')); ?>" class="nav-btn signin-btn">Sign In</a>
         </nav>
     </header>

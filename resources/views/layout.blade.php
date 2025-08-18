@@ -220,7 +220,7 @@
             addChatMessage('...', 'bot', true);
 
             try {
-                const response = await fetch('/api/ai/chat/message', {
+                const response = await fetch('/api/ai/chat/handle-message', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -237,12 +237,22 @@
                 // Remove loading indicator
                 removeLoadingMessage();
 
-                if (data.success) {
-                    addChatMessage(data.response, 'bot');
+                if (data.reply) {
+                    addChatMessage(data.reply, 'bot');
                     chatSession.push({
                         user: message,
-                        bot: data.response
+                        bot: data.reply
                     });
+
+                    // Si des données sont retournées (projet, tâche, etc.)
+                    if (data.project || data.task) {
+                        // Afficher les informations supplémentaires
+                        const info = data.project ? `Projet: ${data.project.title}` :
+                                   data.task ? `Tâche: ${data.task.title}` : '';
+                        if (info) {
+                            addChatMessage(`✅ ${info}`, 'bot');
+                        }
+                    }
                 } else {
                     addChatMessage('Désolé, une erreur est survenue. Veuillez réessayer.', 'bot');
                 }

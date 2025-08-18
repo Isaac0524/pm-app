@@ -43,7 +43,7 @@ class TaskController extends Controller
             'assignees.*'=>'exists:users,id'
         ]);
 
-        $data['status'] = 'open';
+        $data['status'] = 'pending';
         $task = $activity->tasks()->create($data);
         if (!empty($data['assignees'])) $task->assignees()->sync($data['assignees']);
 

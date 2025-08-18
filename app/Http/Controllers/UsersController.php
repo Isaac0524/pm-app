@@ -48,9 +48,7 @@ class UsersController extends Controller
 
     public function update(User $user, Request $request)
     {
-        if ($user->id === Auth::id()) {
-            return back()->with('error', 'Vous ne pouvez pas modifier votre propre compte.');
-        }
+        
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
